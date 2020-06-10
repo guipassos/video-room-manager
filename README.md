@@ -53,7 +53,7 @@ npm run prod
 And so you can perform the initial migrations using:
 
 ``` console
-npm run migrations:run
+npm run migration:run
 ```
 
 
