@@ -1,0 +1,500 @@
+{
+	"info": {
+		"_postman_id": "22b93d7f-7315-430d-80bc-8b506a193f24",
+		"name": "Video Room Manager",
+		"description": "This project aims to manage a video calls server.\r\n\r\nThe application has user management and virtual rooms management.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "00 - Authentication",
+			"item": [
+				{
+					"name": "Auth Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5cac290c-d956-4602-be9d-b756db6eb3cc",
+								"exec": [
+									"let token = null;\r",
+									"let username = null;\r",
+									"\r",
+									"if (responseCode.code == 200) {\r",
+									"    let res = JSON.parse(responseBody);\r",
+									"    token = res.data.token;\r",
+									"    username = res.data.user.username;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"jwt\", token);\r",
+									"\r",
+									"pm.environment.set(\"username\", username);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "text"
+								}
+							],
+							"options": {
+								"urlencoded": {}
+							}
+						},
+						"url": {
+							"raw": "{{url}}auth/login",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "Sign in/authenticate: takes a username and password, and authenticates the\r\nuser"
+					},
+					"response": []
+				},
+				{
+					"name": "Auth Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c7489fa8-97ee-4e68-925d-bc5ba25ed9dc",
+								"exec": [
+									"let token = null;\r",
+									"let username = null;\r",
+									"\r",
+									"if (responseCode.code == 200) {\r",
+									"    let res = JSON.parse(responseBody);\r",
+									"    token = res.data.token;\r",
+									"    username = res.data.user.username;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"jwt\", token);\r",
+									"\r",
+									"pm.environment.set(\"username\", username);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "text"
+								},
+								{
+									"key": "mobileToken",
+									"value": "{{mobileToken}}",
+									"type": "text"
+								}
+							],
+							"options": {
+								"urlencoded": {}
+							}
+						},
+						"url": {
+							"raw": "{{url}}auth/register",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"register"
+							]
+						},
+						"description": "Register (no auth required): takes a username, password and optional string for\r\nmobile_token. Registers the user and authenticates the client as the newly created user.\r\n\r\nNote: username will be passed to slugify"
+					},
+					"response": []
+				},
+				{
+					"name": "Auth Change Password",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "oldPassword",
+									"value": "{{password}}",
+									"type": "text"
+								},
+								{
+									"key": "newPassword",
+									"value": "{{password}}",
+									"type": "text"
+								}
+							],
+							"options": {
+								"urlencoded": {}
+							}
+						},
+						"url": {
+							"raw": "{{url}}auth/password",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"password"
+							]
+						},
+						"description": "Change logged user password"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "01 - User",
+			"item": [
+				{
+					"name": "User List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}user",
+							"host": [
+								"{{url}}user"
+							]
+						},
+						"description": "Get users (no auth required): returns a list of all users"
+					},
+					"response": []
+				},
+				{
+					"name": "User Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}user/{{username}}",
+							"host": [
+								"{{url}}user"
+							],
+							"path": [
+								"{{username}}"
+							]
+						},
+						"description": "Get users (no auth required): takes a username and return the user with\r\nmatching username.\r\n\r\nCan be used ID as a parameter"
+					},
+					"response": []
+				},
+				{
+					"name": "User Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "mobileToken",
+									"value": "{{mobileToken}}",
+									"type": "text"
+								}
+							],
+							"options": {
+								"urlencoded": {}
+							}
+						},
+						"url": {
+							"raw": "{{url}}user",
+							"host": [
+								"{{url}}user"
+							]
+						},
+						"description": "Update User (must be signed in as the user): updates password and/or\r\nmobile_token of the user\r\n\r\nNote: To change the password, use separately route in the auth path"
+					},
+					"response": []
+				},
+				{
+					"name": "User Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}user",
+							"host": [
+								"{{url}}user"
+							]
+						},
+						"description": "Delete User (must be signed in as the user): deletes the user"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "02 - Room",
+			"item": [
+				{
+					"name": "Room Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "878a032f-db1b-498c-b3f7-ab9aeddff3d0",
+								"exec": [
+									"var uuid = null;\r",
+									"\r",
+									"if (responseCode.code == 200) {\r",
+									"    var res = JSON.parse(responseBody);\r",
+									"    uuid = res.data.room.uuid;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"uuid\", uuid);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "{{roomname}}",
+									"type": "text"
+								},
+								{
+									"key": "capacity",
+									"value": "{{roomcapacity}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}room",
+							"host": [
+								"{{url}}room"
+							]
+						},
+						"description": "Create a room (signed in as a user): creates a room hosted by the current user,\r\nwith an optional capacity limit. Default is 5."
+					},
+					"response": []
+				},
+				{
+					"name": "Room Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "{{roomname}}",
+									"type": "text"
+								},
+								{
+									"key": "host",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "capacity",
+									"value": "{{roomcapacity}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}room/{{uuid}}",
+							"host": [
+								"{{url}}room"
+							],
+							"path": [
+								"{{uuid}}"
+							]
+						},
+						"description": "Change host (must be signin as the host): changes the host of the user from the\r\ncurrent user to another user.\r\n\r\nCan be used ID as a parameter"
+					},
+					"response": []
+				},
+				{
+					"name": "Room List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}room",
+							"host": [
+								"{{url}}room"
+							]
+						},
+						"description": "Return a list with all rooms"
+					},
+					"response": []
+				},
+				{
+					"name": "Room Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}room/{{uuid}}",
+							"host": [
+								"{{url}}room"
+							],
+							"path": [
+								"{{uuid}}"
+							]
+						},
+						"description": "Get info (no auth): given a room guid, gets information about a room.\r\n\r\nCan be used ID as a parameter"
+					},
+					"response": []
+				},
+				{
+					"name": "Room Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}room/search/{{username}}",
+							"host": [
+								"{{url}}room"
+							],
+							"path": [
+								"search",
+								"{{username}}"
+							]
+						},
+						"description": "Search for the rooms that a user is in: given a username, returns a list of rooms\r\nthat the user is in.\r\n\r\nCan be used ID as a parameter"
+					},
+					"response": []
+				},
+				{
+					"name": "Room Join or Leave",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "uuid",
+									"value": "{{uuid}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}room/go",
+							"host": [
+								"{{url}}room"
+							],
+							"path": [
+								"go"
+							]
+						},
+						"description": "Join/leave (signed in as a user): joins/leaves the room as the current user"
+					},
+					"response": []
+				},
+				{
+					"name": "Room Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}room/{{uuid}}",
+							"host": [
+								"{{url}}room"
+							],
+							"path": [
+								"{{uuid}}"
+							]
+						},
+						"description": "Delete room (logged host) if not exists users"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{jwt}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "auth",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "fa0c7527-c07c-4319-8374-fba7170887a2",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "b6774933-b5e5-4f37-b9ca-71fb163ee1ed",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -34,10 +34,6 @@ cp .env.example .env
 Then, you can change the database parameters inside [ormconfig.json](ormconfig.json) file, according to your scenario.
    - The default setting is SQLite
 
-And so you can perform the initial migrations using:
-``` console
-npm run migrations:run
-```
 
 
 ### Run API
@@ -53,6 +49,13 @@ or
 ``` console
 npm run prod 
 ```
+
+And so you can perform the initial migrations using:
+
+``` console
+npm run migrations:run
+```
+
 
 ### API's Endpoints
 
@@ -85,3 +88,4 @@ Design a server that handles HTTP requests based on the following specifications
         - Join/leave (signed in as a user): joins/leaves the room as the current user
         - Get info (no auth): given a room guid, gets information about a room
         - Search for the rooms that a user is in: given a username, returns a list of rooms that the user is in.
+
